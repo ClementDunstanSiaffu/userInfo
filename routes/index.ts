@@ -18,14 +18,15 @@ class Routes{
         })
 
         app.post("/getUser",async(req:any,res:any)=>{
-            const currentUser = await UserModel.findOne(req.body.where);
+            const currentUser = await UserModel.findOne({deviceid:req.body.where.deviceid});
             res.status(200).json(currentUser)
         })
 
         app.put("/putUser",async(req:any,res:any)=>{
-            const currentUser = await UserModel.findOne(req.body.where);
+            const currentUser = await UserModel.findOne({deviceid:req.body.where.deviceid});
             if (currentUser){
                 await UserModel.replaceOne(currentUser.toObject(),req.body.where);
+                res.status(200).json({"status":true})
             }else{
                 const userModel = new UserModel(req.body.where);
                 userModel.save((err,docs)=>{
